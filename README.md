@@ -6,7 +6,7 @@ Through to 1Jul26 the takeaway is that both venues were tightly aligned, so real
 
 ## How to reproduce
 
-Both bots poll their venues on a ~15s cadence and append one JSON record per cycle to a local log (Strat1 → `arb_log.jsonl`; Strat2 → `terminal.log`). Strat1's paper-sim is a deterministic replay of that log through the executable gate: `forward_test.py --since <ISO-timestamp>` reconstructs the locked-arb track record for any window. The report's figures and metrics are computed directly from those logs for the 20 Jun → 1 Jul 2026 window.
+Both bots poll their venues on a ~15s cadence and append one JSON record per cycle to a local log. Strat1's paper-sim is a deterministic replay of that log through the executable gate: `forward_test.py --since <ISO-timestamp>` reconstructs the locked-arb track record for any window. The report's figures and metrics are computed directly from those logs for the 20 Jun → 1 Jul 2026 window.
 
 ## Data assumptions
 
@@ -14,4 +14,4 @@ Prices are top-of-book from the Kalshi REST/WebSocket API and the Polymarket CLO
 
 ## Known limitations
 
-Top-of-book **sizes are not logged**, so paper fills are depth-capped by a fixed notional rather than by true book depth — the fill model is deliberately simplified. The headline PnL comes from a single-shot \$10k deployment that locks each bucket once and holds to resolution, so it is sensitive to the window start; the annualized figures normalize a short 11-day window and are **not** strategy-capacity estimates. Strat2's "edge" is a Bregman (information-geometry) divergence, not a raw price gap. Everything here is **read-only** — no orders are ever sent.
+Top-of-book **sizes are not logged**, so paper fills are depth-capped by a fixed notional rather than by true book depth — the fill model is deliberately simplified. The headline PnL is the sum of 5 independent paper arbs — one per outcome bucket — each sized at **\$1,000** of the \$10,000 book, so **\$5,000 (50%)** was deployed across the 5 legs and \$5,000 sat idle. Each bucket is locked once and held to resolution, so the total is sensitive to the window start; the annualized figures normalize a short 11-day window and are **not** strategy-capacity estimates. Strat2's "edge" is a Bregman (information-geometry) divergence, not a raw price gap.
